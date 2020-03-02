@@ -47,26 +47,32 @@ public class MyMiniSearchEngine {
         // homework
         String[] keyWords = keyPhrase.split(" ");
         List<Integer> possibleIDs = new ArrayList<>();
-        List<List<List<Integer>>> allOccurances = new ArrayList<>();
-        for (String keyWord : keyWords) {
-            if (!indexes.containsKey(keyWord)) return new ArrayList<>();
-            allOccurances.add(indexes.get(keyWord));
-        }
-        for (int i = 0; i < allOccurances.get(0).get(0).size(); i++) {
-            if (!allOccurances.get(0).get(0).get(i).equals(new ArrayList<>())) {
-                possibleIDs.add(i);
-            }
-        }
-        for (int i = 1; i < keyWords.length; i++) {
-            for (int j = 0; j < allOccurances.get(i).size(); j++) {
-                int val = possibleIDs.get(j);
-                for (int k = 0; k < allOccurances.get(i).get(j).size(); k++) {
-                    if (val+i != allOccurances.get(i).get(j).get(k)) {
-                        possibleIDs.remove(j);
+        List<Integer> cur = new ArrayList<>(); // for keeping track of indexes
+        for (int i = 0; i < keyWords.length; i++) {
+            if (!indexes.containsKey(keyWords[i])) return new ArrayList<>();
+            List<List<Integer>> thisResult = indexes.get(keyWords[i]);
+            if (possibleIDs.equals(new ArrayList<>())) {
+                for (int j = 0; j < thisResult.size(); j++) {
+                    if (!thisResult.get(j).equals(new ArrayList<>())) {
+                        possibleIDs.add(j);
+                        for (int k = 0; k < thisResult.get(j).size(); k++) {
+                            cur.add(thisResult.get(j).get(k));
+                        }
+                    }
+                }
+            } else {
+                for (int j = 0; j < thisResult.size(); j++) {
+                    if (thisResult.get(j).equals(new ArrayList<>())) {
+                    }
+                    for (int k = 0; j < thisResult.get(j).size(); k++) {
+                        if (thisResult.get(j).get(k) != cur.get(k) + i) {
+                            possibleIDs.remove(k);
+                        }
                     }
                 }
             }
         }
-        return possibleIDs; // place holder
+
+        return possibleIDs;
     }
 }
