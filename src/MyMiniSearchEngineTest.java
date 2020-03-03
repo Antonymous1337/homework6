@@ -34,8 +34,10 @@ public class MyMiniSearchEngineTest {
         List<Integer> result = engine.search("hello world");
 
         assertEquals(2, result.size());
-
-        //assertEquals(List.of(0, 5), result);
+        List<Integer> expected = new ArrayList<>();
+        expected.add(0);
+        expected.add(5);
+        assertEquals(expected, result);
     }
 
     @Test
@@ -50,7 +52,9 @@ public class MyMiniSearchEngineTest {
         for (String input : inputs) {
             List<Integer> result = engine.search(input);
             assertEquals(1, result.size());
-            //assertEquals(List.of(4), result);
+            List<Integer> expected = new ArrayList<>();
+            expected.add(4);
+            assertEquals(expected, result);
         }
     }
 
@@ -66,11 +70,15 @@ public class MyMiniSearchEngineTest {
 
         List<Integer> result = engine.search(inputs[0]);
         assertEquals(1, result.size());
-        //assertEquals(List.of(4), result);
+        List<Integer> expected = new ArrayList<>();
+        expected.add(4);
+        assertEquals(expected, result);
 
         result = engine.search(inputs[1]);
         assertEquals(1, result.size());
-        //assertEquals(List.of(5), result);
+        expected = new ArrayList<>();
+        expected.add(5);
+        assertEquals(expected, result);
     }
 
     @Test

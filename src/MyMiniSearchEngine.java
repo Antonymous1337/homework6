@@ -23,20 +23,20 @@ public class MyMiniSearchEngine {
     private void index(List<String> texts) {
         //homework
 
-        for (int i = 0; i < texts.size(); i++) { // for every single document // i would be for document
-            String[] keyWords = texts.get(i).toLowerCase().split(" ");
-            for (int j = 0; j < keyWords.length; j++) { // for every single word in a document // j would be for index of word in document
-                if (indexes.containsKey(keyWords[j])) {
-                    indexes.get(keyWords[j]).get(i).add(j);
+        for (int docNum = 0; docNum < texts.size(); docNum++) { // for every single document // i would be for document
+            String[] keyWords = texts.get(docNum).toLowerCase().split(" ");
+            for (int keyNum = 0; keyNum < keyWords.length; keyNum++) { // for every single word in a document // j would be for index of word in document
+                if (indexes.containsKey(keyWords[keyNum])) {
+                    indexes.get(keyWords[keyNum]).get(docNum).add(keyNum);
                 } else {
                     List<List<Integer>> temp = new ArrayList<>();
                     List<Integer> temp2 = new ArrayList<>();
-                    temp2.add(j);
+                    temp2.add(keyNum);
                     for (int k = 0; k < texts.size(); k++) {
-                        if (k == i) temp.add(k, temp2);
+                        if (k == docNum) temp.add(k, temp2);
                         else temp.add(new ArrayList<>());
                     }
-                    indexes.put(keyWords[j], temp);
+                    indexes.put(keyWords[keyNum], temp);
                 }
             }
         }
@@ -49,52 +49,36 @@ public class MyMiniSearchEngine {
         // homework
         String[] keyWords = keyPhrase.toLowerCase().split(" ");
         List<Integer> possibleIDs = new ArrayList<>();
-        List<Integer> cur = new ArrayList<>(); // for keeping track of indexes
-        for (int i = 0; i < keyWords.length; i++) {
-            if (!indexes.containsKey(keyWords[i])) return new ArrayList<>();
-            List<List<Integer>> thisResult = indexes.get(keyWords[i]);
+        List<Integer> possibleIDsIndexOfFirstSearchedWord = new ArrayList<>();
+        for (int keyNum = 0; keyNum < keyWords.length; keyNum++) {
+            if (!indexes.containsKey(keyWords[keyNum])) return new ArrayList<>();
+            List<List<Integer>> thisResult = indexes.get(keyWords[keyNum]);
             if (possibleIDs.equals(new ArrayList<>())) {
                 for (int j = 0; j < thisResult.size(); j++) {
                     if (!thisResult.get(j).equals(new ArrayList<>())) {
                         possibleIDs.add(j);
                         for (int k = 0; k < thisResult.get(j).size(); k++) {
-                            cur.add(thisResult.get(j).get(k));
+                            possibleIDsIndexOfFirstSearchedWord.add(thisResult.get(j).get(k));
                         }
                     }
                 }
             } else {
                 for (int j = 0; j < possibleIDs.size(); j++) { // checks every possible ID
-                    boolean found = false;
+                    boolean foundNextWordInProperIndex = false;
                     for (int k = 0; k < thisResult.get(possibleIDs.get(j)).size(); k++) { // checks every word index in array
-                        if (thisResult.get(possibleIDs.get(j)).get(k) == cur.get(j) + i) {
-                            found = true;
+                        if (thisResult.get(possibleIDs.get(j)).get(k) - keyNum == possibleIDsIndexOfFirstSearchedWord.get(j)) {
+                            foundNextWordInProperIndex = true;
                             break;
                         }
                     }
-                    if (!found) {
+                    if (!foundNextWordInProperIndex) {
                         possibleIDs.remove(j);
-                        cur.remove(j);
+                        possibleIDsIndexOfFirstSearchedWord.remove(j);
                         j--;
                     }
                 }
-                /*
-                for (int j = 0; j < thisResult.size(); j++) {
-                    if (thisResult.get(j).equals(new ArrayList<>())) {
-                        possibleIDs.remove(j);
-                        cur.remove(j);
-                    }
-                    boolean found = false;
-                    for (int k = 0; j < thisResult.get(j).size(); k++) {
-                        if (thisResult.get(j).get(k) == cur.get(k) + i) {
-                            found = true;
-                        }
-                    }
-                    if (!found) {
-                        possibleIDs.remove(j);
-                        cur.remove(j);
-                    }*/
-                }
             }
+        }
 
         return possibleIDs;
     }
