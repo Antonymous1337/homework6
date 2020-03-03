@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ public class MyMiniSearchEngine {
     }
 
     public MyMiniSearchEngine(List<String> documents) {
+        indexes = new HashMap<>();
         index(documents);
     }
 
@@ -61,14 +63,22 @@ public class MyMiniSearchEngine {
                     }
                 }
             } else {
+                /*
                 for (int j = 0; j < thisResult.size(); j++) {
                     if (thisResult.get(j).equals(new ArrayList<>())) {
+                        possibleIDs.remove(j);
+                        cur.remove(j);
                     }
+                    boolean found = false;
                     for (int k = 0; j < thisResult.get(j).size(); k++) {
-                        if (thisResult.get(j).get(k) != cur.get(k) + i) {
-                            possibleIDs.remove(k);
+                        if (thisResult.get(j).get(k) == cur.get(k) + i) {
+                            found = true;
                         }
                     }
+                    if (!found) {
+                        possibleIDs.remove(j);
+                        cur.remove(j);
+                    }*/
                 }
             }
         }
