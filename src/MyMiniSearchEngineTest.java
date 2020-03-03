@@ -90,6 +90,6 @@ public class MyMiniSearchEngineTest {
 
         assertEquals(0, result.size());
 
-        //assertEquals(Integer.valueOf(0), result);
+        assertEquals(new ArrayList<>(), result);
     }
 }
