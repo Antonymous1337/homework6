@@ -24,7 +24,7 @@ public class MyMiniSearchEngine {
         //homework
 
         for (int i = 0; i < texts.size(); i++) { // for every single document // i would be for document
-            String[] keyWords = texts.get(i).split(" ");
+            String[] keyWords = texts.get(i).toLowerCase().split(" ");
             for (int j = 0; j < keyWords.length; j++) { // for every single word in a document // j would be for index of word in document
                 if (indexes.containsKey(keyWords[j])) {
                     indexes.get(keyWords[j]).get(i).add(j);
@@ -47,7 +47,7 @@ public class MyMiniSearchEngine {
     // return an empty list if search() finds no match in all documents.
     public List<Integer> search(String keyPhrase) {
         // homework
-        String[] keyWords = keyPhrase.split(" ");
+        String[] keyWords = keyPhrase.toLowerCase().split(" ");
         List<Integer> possibleIDs = new ArrayList<>();
         List<Integer> cur = new ArrayList<>(); // for keeping track of indexes
         for (int i = 0; i < keyWords.length; i++) {
@@ -63,6 +63,20 @@ public class MyMiniSearchEngine {
                     }
                 }
             } else {
+                for (int j = 0; j < possibleIDs.size(); j++) { // checks every possible ID
+                    boolean found = false;
+                    for (int k = 0; k < thisResult.get(possibleIDs.get(j)).size(); k++) { // checks every word index in array
+                        if (thisResult.get(possibleIDs.get(j)).get(k) == cur.get(j) + i) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        possibleIDs.remove(j);
+                        cur.remove(j);
+                        j--;
+                    }
+                }
                 /*
                 for (int j = 0; j < thisResult.size(); j++) {
                     if (thisResult.get(j).equals(new ArrayList<>())) {
@@ -81,8 +95,8 @@ public class MyMiniSearchEngine {
                     }*/
                 }
             }
-        }
 
         return possibleIDs;
     }
 }
+
