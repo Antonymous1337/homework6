@@ -1,8 +1,10 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static org.junit.Assert.assertEquals;
+
+/**
+ * Antony Holshouser
+ */
 public class MyMiniSearchEngine {
     // default solution. OK to change.
     // do not change the signature of index()
@@ -81,6 +83,49 @@ public class MyMiniSearchEngine {
         }
 
         return possibleIDs;
+    }
+
+    /**
+     * Extra... I feel like I almost figured it out, but I gave it a try
+     * @param IDs
+     * @return
+     */
+    public List<String> getDocumentNames(List<Integer> IDs) {
+        List<String> docNames = new ArrayList<>();
+        for (int ID : IDs) {
+            String docName;
+            if (!(docName = getDocumentFromID(ID)).equals("")) {
+                docNames.add(docName);
+            }
+        }
+        return docNames;
+    }
+
+    private String getDocumentFromID(int ID) {
+        Set<String> keys = indexes.keySet();
+        HashMap<String, Integer> docWordIndexes = new HashMap<>();
+        List<String> docNameHelper = new ArrayList<>();
+        for (String key : keys) {
+            if (indexes.get(key).size() < ID) return "";
+            for (int i = 0; i < indexes.get(key).get(ID).size(); i++) {
+                docWordIndexes.put(key, indexes.get(key).get(ID).get(i));
+            }
+            if (docNameHelper.equals(new ArrayList<>())) {
+                for (int i = 0; i < indexes.get(key).size(); i++) {
+                    docNameHelper.add("");
+                }
+            }
+        }
+        keys = docWordIndexes.keySet();
+        for (String key : keys) {
+            docNameHelper.add(docWordIndexes.get(key), key);
+        }
+        String ret = "";
+        for (String word : docNameHelper) {
+            if (!word.equals("")) ret += word + " ";
+        }
+
+        return ret;
     }
 }
 

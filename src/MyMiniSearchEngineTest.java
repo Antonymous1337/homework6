@@ -6,6 +6,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Antony Holshouser
+ */
 public class MyMiniSearchEngineTest {
     private List<String> documents() {
         return new ArrayList<String>(
@@ -91,5 +94,21 @@ public class MyMiniSearchEngineTest {
         assertEquals(0, result.size());
 
         assertEquals(new ArrayList<>(), result);
+    }
+
+    @Test
+    /**
+     * 2 things currently wrong:
+     *   repeats don't get accounted for, like "world world hello"
+     *   "sunday hello world fun" for some reason is messing up and I can't figure out why
+     */
+    public void testGetDocumentNames() {
+        MyMiniSearchEngine engine = new MyMiniSearchEngine(documents());
+
+        List<Integer> result = engine.search("world");
+
+
+        assertEquals(5, engine.getDocumentNames(result).size());
+        System.out.println(engine.getDocumentNames(result));
     }
 }
